@@ -1,0 +1,2 @@
+# ChineseCraft
+ChineseCraft 是一個為了麥塊模組而生的中文繁簡轉換工具
