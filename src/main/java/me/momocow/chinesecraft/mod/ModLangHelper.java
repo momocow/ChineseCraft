@@ -44,10 +44,10 @@ public class ModLangHelper {
 		
 		for (File mod : mods) {
 			progressObserver.accept(mods.length, mod.getName(), ModState.STARTING);
-			
+
 			boolean hasTarget = false;
 			String srcAsset = "", targetAsset = "";
-			for (String assets : JarUtils.listFiles(mod, "assets")) {
+			for (String assets : JarUtils.listFiles(mod, "assets")) { 
 				if (assets.endsWith("lang/" + srcLang + ".lang")) {
 					srcAsset = assets;
 				} else if (assets.endsWith("lang/" + targetLangIn + ".lang")){

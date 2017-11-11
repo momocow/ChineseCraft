@@ -29,7 +29,6 @@ import me.momocow.chinesecraft.mod.ModLangHelper;
 import me.momocow.chinesecraft.mod.ModLangHelper.ModState;
 import me.momocow.common.JarUtils;
 import me.momocow.common.StringUtils;
-import netscape.javascript.JSObject;
 
 public class MainApp  extends Application {
 	private Image iconImg = new Image(JarUtils.getStream(ChineseCraft.class, "image/icon.png"));
@@ -38,18 +37,19 @@ public class MainApp  extends Application {
 	private TextField choosenDir;
 	private TextArea progressMsg;
 	private ProgressBar progressbar;
-	private JSObject window;
+	private Button zhtw;
+	private Button zhcn;
 	private boolean isWorking = false;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		WebView guiContainer = new WebView();
 		this.initWebEngine(guiContainer);
-		guiContainer.setMinHeight(260);
+		guiContainer.setMinHeight(120);
 		
 		this.progressMsg = new TextArea();
 		this.progressMsg.setEditable(false);
-		this.progressMsg.setMinHeight(160);
+		this.progressMsg.setMinHeight(200);
 		
 		Label labelChooseDir = new Label("\u9078\u64c7\u904a\u6232\u8def\u5f91");
 		labelChooseDir.setAlignment(Pos.CENTER);
@@ -78,6 +78,27 @@ public class MainApp  extends Application {
 			}
 		});
 		
+		this.zhcn = new Button("\u7b80\u4f53\u4e2d\u6587");
+		this.zhtw = new Button("\u7e41\u9ad4\u4e2d\u6587");
+		
+		this.zhcn.setOnAction(event -> {
+			this.convert("zh_CN");
+		});
+		
+		this.zhtw.setOnAction(event -> {
+			this.convert("zh_TW");
+		});
+		
+		HBox buttons = new HBox(this.zhcn, this.zhtw);
+		this.zhcn.prefWidthProperty().bind(buttons.widthProperty().divide(2));
+		this.zhtw.prefWidthProperty().bind(buttons.widthProperty().divide(2));
+		
+		this.zhcn.prefHeightProperty().bind(buttons.heightProperty());
+		this.zhtw.prefHeightProperty().bind(buttons.heightProperty());
+		
+		buttons.setMinHeight(80);
+		buttons.setStyle("-fx-font-size: 24;");
+		
 		this.progressbar = new ProgressBar(0f);
 		this.progressbar.setDisable(true);
 		HBox progress = new HBox(this.progressbar);
@@ -86,9 +107,9 @@ public class MainApp  extends Application {
 		
 		HBox localAccessBar = new HBox(labelChooseDir, choosenDir, chooseDir);
 		localAccessBar.setMinHeight(40);
-		localAccessBar.setStyle("-fx-font-size: 18;");
+		localAccessBar.setStyle("-fx-font-size: 20;");
 		HBox.setHgrow(choosenDir, Priority.ALWAYS);
-		VBox vbox = new VBox(guiContainer, localAccessBar, progressMsg, progress);
+		VBox vbox = new VBox(guiContainer, buttons, localAccessBar, progressMsg, progress);
 		
 		primaryStage.setTitle("ChineseCraft v" + ChineseCraft.version);
 		primaryStage.getIcons().add(iconImg);
@@ -99,6 +120,17 @@ public class MainApp  extends Application {
 	}
 	
 	public void convert (String choice) {
+		if (this.gameDir == null || !this.gameDir.exists()) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("\u6ce8\u610f!");
+			alert.setHeaderText(null);
+			alert.setContentText("\u4f60\u4e26\u672a\u9078\u64c7\u4e00\u500b\u6709\u6548\u7684\u904a\u6232\u8def\u5f91!");
+			((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(this.getIcon());
+
+			alert.showAndWait();
+			return;
+		}
+		
 		if (this.isWorking ) {
 			return;
 		}
@@ -106,6 +138,8 @@ public class MainApp  extends Application {
 		this.chooseDir.setDisable(true);
 		this.choosenDir.setDisable(true);
 		this.progressbar.setDisable(false);
+		this.zhcn.setDisable(true);
+		this.zhtw.setDisable(true);
 
 		Task<String> task = new Task<String>() {
 			private int processedMods = 0;
@@ -196,6 +230,8 @@ public class MainApp  extends Application {
 			this.chooseDir.setDisable(false);
 			this.choosenDir.setDisable(false);
 			this.progressbar.setDisable(true);
+			this.zhcn.setDisable(false);
+			this.zhtw.setDisable(false);
 			this.progressbar.setProgress(0);
 			this.choosenDir.setText("");
 			this.gameDir = null;
@@ -227,9 +263,6 @@ public class MainApp  extends Application {
 	private void initWebEngine (WebView guiContainer) {
 		WebEngine engine = guiContainer.getEngine();
 		String content = JarUtils.getTextResource(ChineseCraft.mainJar, "index.html");
-		
-		this.window = (JSObject) engine.executeScript("window");
-		window.setMember("converter", new Bridge(this));
 		engine.loadContent(replaceResourcePaths(content));
 	}
 }
