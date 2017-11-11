@@ -92,7 +92,7 @@ public class MainApp  extends Application {
 		
 		primaryStage.setTitle("ChineseCraft v" + ChineseCraft.version);
 		primaryStage.getIcons().add(iconImg);
-		primaryStage.setScene(new Scene(vbox, 640, 480));
+		primaryStage.setScene(new Scene(vbox, 640, 540));
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
 		primaryStage.show();
