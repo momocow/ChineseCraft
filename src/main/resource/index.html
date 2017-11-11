@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="%css/pure-min.css%">
+		<style>
+			body {
+				text-align: center;
+				background-color: grey;
+				font-weight: bold;
+			}
+			
+			button {
+				margin: 40px 40px  20px 40px;
+				width: 180px;
+			}
+			textarea {
+			    resize: none;
+			}
+		</style>
+	</head>
+	<body>
+		<img src="%image/ChineseCraft.png%">
+		<button class="pure-button" id="zh_CN" onClick="converter.target(this.id)">
+			<img src="%image/simplified.png%" height="30">
+			<div class="btnText">简体中文</div>
+		</button>
+		<button class="pure-button" id="zh_TW"  onClick="converter.target(this.id)">
+			<img src="%image/traditional.png%" height="30">
+			<div class="btnText">繁體中文</div>
+		</button>
+	</body>
+</html>

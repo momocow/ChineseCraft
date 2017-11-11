@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Implementation-Title: Chinese character converter for Mincraft mods 
+Implementation-Version: 1.0.0
+Main-Class: me.momocow.chinesecraft.ChineseCraft
+
